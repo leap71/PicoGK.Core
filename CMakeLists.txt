@@ -62,6 +62,12 @@ endif()
 
 add_subdirectory(native/PicoGKRuntime)
 
+# PicoGKRuntime also contains large translation units that can exceed
+# MSVC's default COFF section limit.
+if(MSVC)
+    target_compile_options(PicoGKRuntime PRIVATE /bigobj)
+endif()
+
 
 # -----------------------------------------------------------------------------
 # NuGet packaging
