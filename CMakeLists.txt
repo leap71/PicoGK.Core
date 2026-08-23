@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(PicoGKCore VERSION 3.0.0 LANGUAGES CXX)
+project(PicoGKCore VERSION 26.8.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -76,8 +76,8 @@ endif()
 # Convenience target for a complete local build of the current platform:
 # native runtime -> runtimes/<RID>/native -> PicoGK.Core NuGet package.
 #
-# The native project version is defined above as 3.0.0.
-# The NuGet package version is owned by PicoGK.Core.csproj
+# The native runtime version is defined above as 26.8.0.
+# The NuGet package version is owned independently by PicoGK.Core.csproj
 # (for example 3.0.0-alpha.1).
 find_program(PICOGK_DOTNET_EXECUTABLE NAMES dotnet)
 
