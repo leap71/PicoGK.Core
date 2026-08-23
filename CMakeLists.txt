@@ -53,6 +53,13 @@ add_subdirectory(
     EXCLUDE_FROM_ALL)
 
 add_subdirectory(native/PicoVDB)
+
+# OpenVDB contains large template-heavy translation units that can exceed
+# MSVC's default COFF section limit.
+if(MSVC)
+    target_compile_options(PicoVDB PRIVATE /bigobj)
+endif()
+
 add_subdirectory(native/PicoGKRuntime)
 
 
