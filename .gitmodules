@@ -1,0 +1,6 @@
+[submodule "third_party/openvdb"]
+	path = third_party/openvdb
+	url = https://github.com/AcademySoftwareFoundation/openvdb.git
+[submodule "third_party/oneTBB"]
+	path = third_party/oneTBB
+	url = https://github.com/uxlfoundation/oneTBB.git

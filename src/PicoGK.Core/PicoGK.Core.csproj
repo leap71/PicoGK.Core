@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <PackageId>PicoGK.Core</PackageId>
+    <Version>3.0.0-alpha.1</Version>
+    <Authors>LEAP 71</Authors>
+    <Company>LEAP 71</Company>
+    <Description>Compact PicoGK computational geometry core.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/leap71/PicoGK</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../artifacts/runtimes/**/native/*"
+          Pack="true"
+          PackagePath="runtimes/%(RecursiveDir)"
+          Visible="false" />
+  </ItemGroup>
+
+</Project>
