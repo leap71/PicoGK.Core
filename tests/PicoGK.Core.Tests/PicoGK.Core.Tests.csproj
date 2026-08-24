@@ -23,6 +23,12 @@
     <ProjectReference Include="../../src/PicoGK.Core/PicoGK.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="xunit.runner.json"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!--
     The CI native job builds the current RID first. Copy that exact runtime
     beside the test executable so these are true managed/native integration tests.
