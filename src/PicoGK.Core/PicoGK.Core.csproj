@@ -23,7 +23,7 @@
   <ItemGroup>
     <None Include="../../artifacts/runtimes/**/native/*"
           Pack="true"
-          PackagePath="runtimes/%(RecursiveDir)native/"
+          PackagePath="runtimes/%(RecursiveDir)"
           Visible="false" />
   </ItemGroup>
 
