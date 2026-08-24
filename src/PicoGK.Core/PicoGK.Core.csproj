@@ -13,7 +13,7 @@
     <Company>LEAP 71</Company>
     <Description>Compact PicoGK computational geometry core.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/leap71/PicoGK</RepositoryUrl>
+    <RepositoryUrl>https://github.com/leap71/PicoGK.Core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -23,7 +23,7 @@
   <ItemGroup>
     <None Include="../../artifacts/runtimes/**/native/*"
           Pack="true"
-          PackagePath="runtimes/%(RecursiveDir)"
+          PackagePath="runtimes/%(RecursiveDir)native/"
           Visible="false" />
   </ItemGroup>
 
