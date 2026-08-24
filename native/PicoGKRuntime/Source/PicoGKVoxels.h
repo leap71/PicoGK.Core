@@ -96,9 +96,6 @@ public:
     /// Returns true if the level set contains no interior samples.
     bool bIsEmpty() const;
 
-    /// Compares voxelized inside/outside classification across both active bounds.
-    bool bIsEqual(const Voxels& oOther) const;
-
     /// Returns the voxel edge length [mm].
     float fVoxelSizeMM() const;
 

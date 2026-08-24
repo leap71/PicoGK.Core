@@ -663,40 +663,6 @@ float Voxels::fBackgroundMM() const
     return m_poImpl->roGrid->background();
 }
 
-bool Voxels::bIsEqual(const Voxels& oOther) const
-{
-    ValidateCompatible(oOther);
-
-    const bool bThisEmpty = bIsEmpty();
-    const bool bOtherEmpty = oOther.bIsEmpty();
-    if (bThisEmpty || bOtherEmpty)
-        return bThisEmpty == bOtherEmpty;
-
-    const openvdb::CoordBBox oThisBBox = m_poImpl->roGrid->evalActiveVoxelBoundingBox();
-    const openvdb::CoordBBox oOtherBBox = oOther.m_poImpl->roGrid->evalActiveVoxelBoundingBox();
-
-    const openvdb::Coord xyzMin(std::min(oThisBBox.min().x(), oOtherBBox.min().x()),
-                                std::min(oThisBBox.min().y(), oOtherBBox.min().y()),
-                                std::min(oThisBBox.min().z(), oOtherBBox.min().z()));
-    const openvdb::Coord xyzMax(std::max(oThisBBox.max().x(), oOtherBBox.max().x()),
-                                std::max(oThisBBox.max().y(), oOtherBBox.max().y()),
-                                std::max(oThisBBox.max().z(), oOtherBBox.max().z()));
-
-    auto oThisAccessor = m_poImpl->roGrid->getConstAccessor();
-    auto oOtherAccessor = oOther.m_poImpl->roGrid->getConstAccessor();
-
-    for (int32_t x = xyzMin.x(); x <= xyzMax.x(); ++x)
-    for (int32_t y = xyzMin.y(); y <= xyzMax.y(); ++y)
-    for (int32_t z = xyzMin.z(); z <= xyzMax.z(); ++z)
-    {
-        const openvdb::Coord xyz(x, y, z);
-        if ((oThisAccessor.getValue(xyz) <= 0.0f) !=
-            (oOtherAccessor.getValue(xyz) <= 0.0f))
-            return false;
-    }
-    return true;
-}
-
 // TODO: Revisit CSG implementation and benchmark OpenVDB's non-destructive
 // csgUnionCopy / csgDifferenceCopy / csgIntersectionCopy paths. These may
 // allow the C# + / - / & operators to avoid unnecessary deep copies and could

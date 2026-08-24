@@ -258,14 +258,6 @@ internal static unsafe class NativeMethods
         in Vector3 vecTestPoint,
         [MarshalAs(UnmanagedType.I1)] out bool bInside);
 
-    [DllImport(strLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Voxels_bGetIsEqual")]
-    [return: MarshalAs(UnmanagedType.I1)]
-    internal static extern bool Voxels_bGetIsEqual(
-        SafeLibraryHandle hInstance,
-        SafeVoxelsHandle hThis,
-        SafeVoxelsHandle hOther,
-        [MarshalAs(UnmanagedType.I1)] out bool bEqual);
-
     [DllImport(strLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Voxels_bGetVolume")]
     [return: MarshalAs(UnmanagedType.I1)]
     internal static extern bool Voxels_bGetVolume(SafeLibraryHandle hInstance, SafeVoxelsHandle hThis, out float fVolumeMM3);

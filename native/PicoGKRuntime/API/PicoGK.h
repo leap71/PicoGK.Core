@@ -305,12 +305,6 @@ PICOGK_API bool Voxels_bGetIsInside(PKINSTANCE hInstance,
                                     const PKVector3* pvecTestPoint,
                                     bool* pbInside);
 
-/// Reports whether both Voxels represent the same voxelized inside/outside solid.
-PICOGK_API bool Voxels_bGetIsEqual(PKINSTANCE hInstance,
-                                   PKVOXELS hThis,
-                                   PKVOXELS hOther,
-                                   bool* pbEqual);
-
 /// Calculates enclosed volume [mm^3].
 PICOGK_API bool Voxels_bGetVolume(PKINSTANCE hInstance,
                                   PKVOXELS hThis,

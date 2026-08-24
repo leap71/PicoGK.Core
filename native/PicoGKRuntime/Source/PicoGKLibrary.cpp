@@ -759,21 +759,6 @@ PICOGK_API bool Voxels_bGetIsInside(PKINSTANCE hInstance,
     });
 }
 
-PICOGK_API bool Voxels_bGetIsEqual(PKINSTANCE hInstance,
-                                   PKVOXELS hThis,
-                                   PKVOXELS hOther,
-                                   bool* pbEqual)
-{
-    if (pbEqual) *pbEqual = false;
-    return ApiBoundary::Run(false, [&]
-    {
-        if (!pbEqual) throw std::invalid_argument("Equality result output pointer is null");
-        auto roLib = roInstance(hInstance);
-        *pbEqual = roLib->m_oVoxels.roGet(hThis)->bIsEqual(*roLib->m_oVoxels.roGet(hOther));
-        return true;
-    });
-}
-
 PICOGK_API bool Voxels_bGetVolume(PKINSTANCE hInstance, PKVOXELS hThis, float* pfVolumeMM3)
 {
     if (pfVolumeMM3) *pfVolumeMM3 = 0.0f;

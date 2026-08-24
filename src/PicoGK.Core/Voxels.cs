@@ -356,14 +356,6 @@ public sealed class Voxels : IDisposable
         return bInside;
     }
 
-    public bool bIsEqual(Voxels voxOther)
-    {
-        CheckSameLibrary(voxOther);
-        NativeApi.Check(NativeMethods.Voxels_bGetIsEqual(
-            lib.hNative, hNative, voxOther.hNative, out bool bEqual));
-        return bEqual;
-    }
-
     public long nMemUsage()
     {
         NativeApi.Check(NativeMethods.Voxels_bGetMemUsage(lib.hNative, hNative, out long nBytes));

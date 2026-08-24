@@ -35,13 +35,23 @@ public class VoxelsTests
     }
 
     [Fact]
-    public void Copy_IsEquivalent()
+    public void Copy_IsIndependent()
     {
         using Library lib = new(TestHelpers.fVoxelSizeMM);
         using Voxels voxSource = Voxels.voxFromSphere(lib, Vector3.Zero, 8f);
         using Voxels voxCopy = new(voxSource);
 
-        Assert.True(voxSource.bIsEqual(voxCopy));
+        float fSourceVolume = voxSource.fCalculateVolume();
+        float fCopyVolume = voxCopy.fCalculateVolume();
+
+        Assert.Equal(fSourceVolume, fCopyVolume);
+        Assert.Equal(voxSource.oVoxelDimensions(), voxCopy.oVoxelDimensions());
+        Assert.Equal(voxSource.bIsInside(Vector3.Zero), voxCopy.bIsInside(Vector3.Zero));
+
+        voxCopy.Offset(2f);
+
+        Assert.Equal(fSourceVolume, voxSource.fCalculateVolume());
+        Assert.True(voxCopy.fCalculateVolume() > fCopyVolume);
     }
 
     [Fact]
@@ -53,13 +63,20 @@ public class VoxelsTests
 
         using Voxels voxA = Voxels.voxFromSphere(lib, vecCenterA, 6f);
         using Voxels voxB = Voxels.voxFromSphere(lib, vecCenterB, 6f);
-        using Voxels voxACopy = new(voxA);
-        using Voxels voxBCopy = new(voxB);
+
+        float fVolumeA = voxA.fCalculateVolume();
+        float fVolumeB = voxB.fCalculateVolume();
+        Assert.False(voxA.bIsInside(vecCenterB));
+        Assert.False(voxB.bIsInside(vecCenterA));
 
         using Voxels voxResult = voxA + voxB;
 
-        Assert.True(voxA.bIsEqual(voxACopy));
-        Assert.True(voxB.bIsEqual(voxBCopy));
+        Assert.Equal(fVolumeA, voxA.fCalculateVolume());
+        Assert.Equal(fVolumeB, voxB.fCalculateVolume());
+        Assert.True(voxA.bIsInside(vecCenterA));
+        Assert.True(voxB.bIsInside(vecCenterB));
+        Assert.False(voxA.bIsInside(vecCenterB));
+        Assert.False(voxB.bIsInside(vecCenterA));
         Assert.True(voxResult.bIsInside(vecCenterA));
         Assert.True(voxResult.bIsInside(vecCenterB));
     }
