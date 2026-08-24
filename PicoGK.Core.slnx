@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/PicoGK.Core/PicoGK.Core.csproj" />
+  <Project Path="tests/PicoGK.Core.Tests/PicoGK.Core.Tests.csproj" />
+</Solution>

@@ -254,7 +254,7 @@ jobs:
           echo "PACKAGES_DIR=$packages_dir" >> "$GITHUB_ENV"
           echo "PICOGK_PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
 
-          dotnet restore tests/PicoGK.Core.PackageTests.csproj \
+          dotnet restore tests/PicoGK.Core.PackageTests/PicoGK.Core.PackageTests.csproj \
             -p:RestorePackagesPath="$packages_dir" \
             -p:PicoGKPackageVersion="$version" \
             -p:RuntimeIdentifier="${{ matrix.rid }}" \
@@ -264,7 +264,7 @@ jobs:
       - name: Run package consumer tests
         shell: bash
         run: >-
-          dotnet test tests/PicoGK.Core.PackageTests.csproj
+          dotnet test tests/PicoGK.Core.PackageTests/PicoGK.Core.PackageTests.csproj
           -c Release
           --no-restore
           -p:RestorePackagesPath="$PACKAGES_DIR"
