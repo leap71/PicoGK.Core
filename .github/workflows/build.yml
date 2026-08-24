@@ -182,3 +182,65 @@ jobs:
           name: PicoGK.Core-NuGet
           path: artifacts/packages/*.nupkg
           if-no-files-found: error
+
+  package-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS-arm64
+            os: macos-15
+            rid: osx-arm64
+          - name: Windows-x64
+            os: windows-2025
+            rid: win-x64
+          - name: Linux-x64
+            os: ubuntu-22.04
+            rid: linux-x64
+
+    name: NuGet package / ${{ matrix.name }}
+    needs: package
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download NuGet package
+        uses: actions/download-artifact@v8
+        with:
+          name: PicoGK.Core-NuGet
+          path: artifacts/packages
+
+      - name: Restore package consumer tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg=$(ls artifacts/packages/*.nupkg | head -n 1)
+          version=$(basename "$pkg" .nupkg)
+          version=${version#PicoGK.Core.}
+          packages_dir="$PWD/.package-test/nuget"
+          rm -rf "$packages_dir"
+
+          echo "PACKAGES_DIR=$packages_dir" >> "$GITHUB_ENV"
+          echo "PICOGK_PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
+
+          dotnet restore tests/PicoGK.Core.PackageTests.csproj \
+            -p:RestorePackagesPath="$packages_dir" \
+            -p:PicoGKPackageVersion="$version" \
+            -p:RuntimeIdentifier="${{ matrix.rid }}" \
+            --source "https://api.nuget.org/v3/index.json" \
+            --source "$PWD/artifacts/packages"
+
+      - name: Run package consumer tests
+        shell: bash
+        run: >-
+          dotnet test tests/PicoGK.Core.PackageTests.csproj
+          -c Release
+          --no-restore
+          -p:RestorePackagesPath="$PACKAGES_DIR"
+          -p:PicoGKPackageVersion="$PICOGK_PACKAGE_VERSION"
+          -p:RuntimeIdentifier=${{ matrix.rid }}
