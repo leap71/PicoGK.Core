@@ -46,21 +46,34 @@ if(APPLE)
     set_target_properties(PicoGKRuntime PROPERTIES
         BUILD_RPATH "@loader_path"
         INSTALL_RPATH "@loader_path")
+elseif(UNIX)
+    # Match the macOS side-by-side packaging model on ELF platforms. The runtime
+    # and its TBB dependency are loaded from the same NuGet native directory.
+    set_target_properties(PicoGKRuntime PROPERTIES
+        BUILD_RPATH "$ORIGIN"
+        INSTALL_RPATH "$ORIGIN")
 elseif(WIN32)
     target_compile_definitions(PicoGKRuntime PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
 endif()
 
+# This project packages the build-tree output directly. Do not leave CMake's
+# automatic build-tree library search paths in the shipped runtime; use only
+# the relocatable install rpath selected above.
+set_target_properties(PicoGKRuntime PROPERTIES
+    BUILD_WITH_INSTALL_RPATH TRUE
+    INSTALL_RPATH_USE_LINK_PATH FALSE)
+
 # oneTBB is deliberately dynamic. Package the loader-facing library name next
 # to PicoGKRuntime, not oneTBB's fully versioned build filename.
 #
-# On macOS, for example:
-#   physical build file:  libtbb.12.19.dylib
-#   Mach-O install name:   @rpath/libtbb.12.dylib
-#   packaged filename:     libtbb.12.dylib
+# On macOS/Linux, for example:
+#   physical build file:  libtbb.12.19.dylib / libtbb.so.12.19
+#   loader reference:     @rpath/libtbb.12.dylib / libtbb.so.12
+#   packaged filename:    libtbb.12.dylib / libtbb.so.12
 #
 # Copy the actual binary rather than relying on a symlink surviving NuGet
 # packaging/extraction. Windows has no SONAME concept, so use the target name.
-if(APPLE)
+if(UNIX)
     add_custom_command(TARGET PicoGKRuntime POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E rm -f
                 "${PICOGK_NATIVE_OUTPUT_DIR}/$<TARGET_FILE_NAME:TBB::tbb>"

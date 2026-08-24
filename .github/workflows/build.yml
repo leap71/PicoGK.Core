@@ -18,6 +18,9 @@ jobs:
           - name: Windows-x64
             os: windows-2025
             rid: win-x64
+          - name: Linux-x64
+            os: ubuntu-22.04
+            rid: linux-x64
 
     name: Native / ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
@@ -53,6 +56,26 @@ jobs:
             exit 1
           fi
 
+      - name: Audit Linux dependency paths
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          native="artifacts/runtimes/${{ matrix.rid }}/native"
+
+          readelf -d "$native/picogk.so" | grep -E 'NEEDED|RPATH|RUNPATH' || true
+          ldd "$native/picogk.so"
+
+          if ldd "$native"/*.so | grep -q 'not found'; then
+            echo "Unresolved native dependency found."
+            exit 1
+          fi
+
+          if readelf -d "$native/picogk.so" | grep -E 'RPATH|RUNPATH' | grep -E '/home/runner|/usr/local|/opt/'; then
+            echo "Build-machine absolute path found in ELF runpath."
+            exit 1
+          fi
+
       - name: Upload native runtime
         uses: actions/upload-artifact@v7
         with:
@@ -84,6 +107,12 @@ jobs:
           name: native-win-x64
           path: artifacts/runtimes/win-x64/native
 
+      - name: Download Linux runtime
+        uses: actions/download-artifact@v8
+        with:
+          name: native-linux-x64
+          path: artifacts/runtimes/linux-x64/native
+
       - name: Restore
         run: dotnet restore src/PicoGK.Core/PicoGK.Core.csproj
 
@@ -96,6 +125,15 @@ jobs:
           -c Release
           --no-build
           -o artifacts/packages
+
+      - name: Verify package runtime layout
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg=$(ls artifacts/packages/*.nupkg | head -n 1)
+          unzip -l "$pkg" | grep -q 'runtimes/osx-arm64/native/'
+          unzip -l "$pkg" | grep -q 'runtimes/win-x64/native/'
+          unzip -l "$pkg" | grep -q 'runtimes/linux-x64/native/'
 
       - name: Upload NuGet package
         uses: actions/upload-artifact@v7
