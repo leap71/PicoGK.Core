@@ -76,6 +76,17 @@ jobs:
             exit 1
           fi
 
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Test managed/native integration
+        shell: bash
+        run: >-
+          dotnet test tests/PicoGK.Core.Tests/PicoGK.Core.Tests.csproj
+          -c Release
+          --runtime ${{ matrix.rid }}
+
       - name: Upload native runtime
         uses: actions/upload-artifact@v7
         with:
@@ -130,10 +141,40 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          pkg=$(ls artifacts/packages/*.nupkg | head -n 1)
-          unzip -l "$pkg" | grep -q 'runtimes/osx-arm64/native/'
-          unzip -l "$pkg" | grep -q 'runtimes/win-x64/native/'
-          unzip -l "$pkg" | grep -q 'runtimes/linux-x64/native/'
+          python3 - <<'PY'
+          import glob
+          import sys
+          import zipfile
+
+          pkg = glob.glob('artifacts/packages/*.nupkg')[0]
+          names = set(zipfile.ZipFile(pkg).namelist())
+
+          expected = {
+              'runtimes/osx-arm64/native/libtbb.12.dylib',
+              'runtimes/osx-arm64/native/picogk.dylib',
+              'runtimes/win-x64/native/picogk.dll',
+              'runtimes/win-x64/native/tbb12.dll',
+              'runtimes/linux-x64/native/libtbb.so.12',
+              'runtimes/linux-x64/native/picogk.so',
+          }
+
+          missing = sorted(expected - names)
+          malformed = sorted(
+              name for name in names
+              if name.startswith('runtimes/') and len(name.split('/')) != 4
+          )
+
+          if missing:
+              print('Missing runtime entries:')
+              print('\n'.join(missing))
+
+          if malformed:
+              print('Malformed runtime entries:')
+              print('\n'.join(malformed))
+
+          if missing or malformed:
+              sys.exit(1)
+          PY
 
       - name: Upload NuGet package
         uses: actions/upload-artifact@v7
