@@ -32,7 +32,7 @@ The project is the spiritual successor to PicoGKRuntime 2.x and is being develop
 
 ## Development
 
-Managed C# code follows the [PicoGK Coding Conventions](CODING_CONVENTIONS.md).
+Managed code follows the [C# Coding Conventions](CODING_CONVENTIONS.md). First-party native code follows the [C++ Coding Conventions](native/CODING_CONVENTIONS.md).
 
 ## License
 

@@ -1,6 +1,6 @@
-# PicoGK Coding Conventions
+# C# Coding Conventions
 
-These conventions apply to the managed C# code in PicoGK. The declared C# type remains authoritative; prefixes provide compact semantic context at call sites and across the native boundary.
+These conventions apply to first-party managed C# code in PicoGK, including managed tests. The declared C# type remains authoritative; prefixes provide compact semantic context at call sites and across the native boundary.
 
 ## Semantic prefixes
 
@@ -101,7 +101,7 @@ Likewise, `A`, `B`, `C`, and `D` are acceptable for canonical vertices or indice
 
 Keep these exceptions narrow. Use descriptive prefixed names whenever scope, role, or units would otherwise be unclear, especially at public API and serialization boundaries.
 
-## General C# practices
+## General practices
 
 - Enable nullable reference types.
 - Validate arguments explicitly at public API boundaries.
