@@ -267,7 +267,7 @@ jobs:
           <configuration>
             <packageSources>
               <clear />
-              <add key="local" value="$PWD/artifacts/packages" />
+              <add key="local" value="$GITHUB_WORKSPACE/artifacts/packages" />
               <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
             </packageSources>
             <packageSourceMapping>
