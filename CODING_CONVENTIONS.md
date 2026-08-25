@@ -11,7 +11,7 @@ These conventions apply to the managed C# code in PicoGK. The declared C# type r
 | `f` | Floating-point value | `fRadiusMM`, `fTolerance` |
 | `str` | String | `strName`, `strError` |
 | `o` | Object or value without a more specific prefix | `oBoundingBox`, `oSlice` |
-| `e` | Enum value | `eAxis`, `eState` |
+| `e` | Variable, parameter, property, or result of an enum type | `eAxis`, `eState` |
 | `h` | Native or managed handle | `hNative`, `hMesh` |
 | `p` | Native pointer used in interop code | `pValues`, `pVertices` |
 | `lib` | `Library` | `lib`, `libGeometry` |
@@ -82,14 +82,14 @@ A method returning `void` uses an unprefixed action name such as `Clear()`, `Off
 
 Use semantic PascalCase names for classes, structs, and other concrete types. Interfaces use the conventional `I` prefix.
 
-Enum types use the `E...` form. Enum values normally use the `e` prefix. Cartesian axis or component values are an exception and remain `X`, `Y`, and `Z`:
+Enum types use the `E...` form. Enum members use unprefixed PascalCase because they are normally qualified by the enum type. For example, use `EState.Ready`, not `EState.eReady`:
 
 ```csharp
-public enum ESliceAxis
+public enum EState
 {
-    X,
-    Y,
-    Z
+    Ready,
+    Running,
+    Complete
 }
 ```
 
