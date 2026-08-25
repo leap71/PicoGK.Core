@@ -28,18 +28,18 @@ public class SdfSliceTests
         using Library lib = new(TestHelpers.fVoxelSizeMM);
         using Voxels vox = Voxels.voxFromSphere(lib, Vector3.Zero, 8f);
 
-        SdfSlice slc = vox.slcCreateSlice(out int nSliceCount);
+        SdfSlice oSlice = vox.oCreateSlice(out int nSliceCount);
         Assert.True(nSliceCount > 0);
 
-        vox.GetSlice(nSliceCount / 2, slc);
+        vox.GetSlice(nSliceCount / 2, oSlice);
 
-        Assert.True(slc.nWidth > 0);
-        Assert.True(slc.nHeight > 0);
+        Assert.True(oSlice.nWidth > 0);
+        Assert.True(oSlice.nHeight > 0);
 
         bool bHasInside = false;
         bool bHasOutside = false;
 
-        foreach (short nValue in slc.aValues)
+        foreach (short nValue in oSlice.aValues)
         {
             bHasInside |= nValue < SdfSlice.nZero;
             bHasOutside |= nValue > SdfSlice.nZero;

@@ -129,15 +129,15 @@ internal static class NativeApi
         SafeLibraryHandle hLibrary,
         SafeVoxelsHandle hVoxels,
         int nSlice,
-        SdfSlice slc,
+        SdfSlice oSliceBuffer,
         Voxels.ESliceAxis eAxis)
     {
-        fixed (short* pValues = slc.anValues)
+        fixed (short* pValues = oSliceBuffer.anValues)
         {
             NativeSdfSlice oSlice = new()
             {
                 pValues        = pValues,
-                nValueCapacity = (ulong)slc.nCapacity
+                nValueCapacity = (ulong)oSliceBuffer.nCapacity
             };
 
             bool bSuccess = eAxis switch
@@ -151,7 +151,7 @@ internal static class NativeApi
             };
 
             Check(bSuccess);
-            slc.SetDimensions(checked((int)oSlice.nWidth), checked((int)oSlice.nHeight));
+            oSliceBuffer.SetDimensions(checked((int)oSlice.nWidth), checked((int)oSlice.nHeight));
         }
     }
 
@@ -159,19 +159,19 @@ internal static class NativeApi
         SafeLibraryHandle hLibrary,
         SafeVoxelsHandle hVoxels,
         float fZSlice,
-        SdfSlice slc)
+        SdfSlice oSliceBuffer)
     {
-        fixed (short* pValues = slc.anValues)
+        fixed (short* pValues = oSliceBuffer.anValues)
         {
             NativeSdfSlice oSlice = new()
             {
                 pValues        = pValues,
-                nValueCapacity = (ulong)slc.nCapacity
+                nValueCapacity = (ulong)oSliceBuffer.nCapacity
             };
 
             Check(NativeMethods.Voxels_bGetInterpolatedZSlice(
                 hLibrary, hVoxels, fZSlice, ref oSlice));
-            slc.SetDimensions(checked((int)oSlice.nWidth), checked((int)oSlice.nHeight));
+            oSliceBuffer.SetDimensions(checked((int)oSlice.nWidth), checked((int)oSlice.nHeight));
         }
     }
 

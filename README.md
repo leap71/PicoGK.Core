@@ -30,6 +30,10 @@ Higher-level geometry abstractions such as lattices, polylines, sweeps, sections
 
 The project is the spiritual successor to PicoGKRuntime 2.x and is being developed as the foundation for PicoGK 3.x.
 
+## Development
+
+Managed C# code follows the [PicoGK Coding Conventions](CODING_CONVENTIONS.md).
+
 ## License
 
 PicoGK.Core is licensed under the Apache License 2.0.

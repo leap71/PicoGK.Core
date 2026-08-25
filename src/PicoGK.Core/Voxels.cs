@@ -449,7 +449,7 @@ public sealed class Voxels : IDisposable
     /// <summary>
     /// Allocates a reusable SDF slice of the correct dimensions for the selected axis.
     /// </summary>
-    public SdfSlice slcCreateSlice(out int nSliceCount, ESliceAxis eAxis = ESliceAxis.Z)
+    public SdfSlice oCreateSlice(out int nSliceCount, ESliceAxis eAxis = ESliceAxis.Z)
     {
         VoxelDimensions oDim = oVoxelDimensions();
         switch (eAxis)
@@ -474,19 +474,19 @@ public sealed class Voxels : IDisposable
     /// rows in -Y; X slices store +Y across each row and rows in -Z; Y slices
     /// store +X across each row and rows in -Z.
     /// </summary>
-    public void GetSlice(int nSlice, SdfSlice slc, ESliceAxis eAxis = ESliceAxis.Z)
+    public void GetSlice(int nSlice, SdfSlice oSlice, ESliceAxis eAxis = ESliceAxis.Z)
     {
-        ArgumentNullException.ThrowIfNull(slc);
-        NativeApi.GetSdfSlice(lib.hNative, hNative, nSlice, slc, eAxis);
+        ArgumentNullException.ThrowIfNull(oSlice);
+        NativeApi.GetSdfSlice(lib.hNative, hNative, nSlice, oSlice, eAxis);
     }
 
     /// <summary>
     /// Fills a reusable Z slice sampled at a fractional index-space Z coordinate.
     /// </summary>
-    public void GetInterpolatedZSlice(float fZSlice, SdfSlice slc)
+    public void GetInterpolatedZSlice(float fZSlice, SdfSlice oSlice)
     {
-        ArgumentNullException.ThrowIfNull(slc);
-        NativeApi.GetInterpolatedZSdfSlice(lib.hNative, hNative, fZSlice, slc);
+        ArgumentNullException.ThrowIfNull(oSlice);
+        NativeApi.GetInterpolatedZSdfSlice(lib.hNative, hNative, fZSlice, oSlice);
     }
 
     /// <summary>

@@ -6,6 +6,17 @@ namespace PicoGK;
 /// </summary>
 public class PicoGKException : Exception
 {
-    public PicoGKException(string strMessage) : base(strMessage) { }
-    public PicoGKException(string strMessage, Exception xInner) : base(strMessage, xInner) { }
+    /// <summary>Creates an exception with the native runtime error message.</summary>
+    public PicoGKException(string strMessage)
+        : base(strMessage)
+    {
+    }
+
+    /// <summary>Creates an exception with the native runtime error message and originating exception.</summary>
+    public PicoGKException(
+        string strMessage,
+        Exception oInnerException)
+        : base(strMessage, oInnerException)
+    {
+    }
 }

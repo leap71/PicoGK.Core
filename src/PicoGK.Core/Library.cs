@@ -15,7 +15,7 @@ public sealed class Library : IDisposable
 {
     internal readonly SafeLibraryHandle hNative;
 
-    static readonly TimeSpan m_oMemoryCheckInterval = TimeSpan.FromSeconds(10);
+    static readonly TimeSpan c_oMemoryCheckInterval = TimeSpan.FromSeconds(10);
 
     readonly object m_mtxMemory = new();
     Timer? m_oTimerMemCheck;
@@ -180,7 +180,7 @@ public sealed class Library : IDisposable
             {
                 oTimer?.Dispose();
             }
-        }, null, m_oMemoryCheckInterval, m_oMemoryCheckInterval);
+        }, null, c_oMemoryCheckInterval, c_oMemoryCheckInterval);
 
         return oTimer;
     }
