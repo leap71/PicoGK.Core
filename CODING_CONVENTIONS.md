@@ -12,13 +12,6 @@ These conventions apply to the managed C# code in PicoGK. The declared C# type r
 | `str` | String | `strName`, `strError` |
 | `o` | Object or value without a more specific prefix | `oBoundingBox`, `oSlice` |
 | `e` | Enum value | `eAxis`, `eState` |
-
-`f` describes floating-point semantics, not a particular CLR type.
-
-### PicoGK domain prefixes
-
-| Prefix | Type or meaning | Examples |
-| --- | --- | --- |
 | `h` | Native or managed handle | `hNative`, `hMesh` |
 | `p` | Native pointer used in interop code | `pValues`, `pVertices` |
 | `lib` | `Library` | `lib`, `libGeometry` |
@@ -26,8 +19,9 @@ These conventions apply to the managed C# code in PicoGK. The declared C# type r
 | `msh` | `Mesh` | `mshSurface`, `mshResult` |
 | `tri` | `Triangle` | `triFace`, `triCurrent` |
 | `quad` | `Quad` | `quadFace`, `quadCurrent` |
-| `seg` | `Segment` | `segEdge`, `segCurrent` |
 | `vec` | `Vector2` or `Vector3` | `vecPosition`, `vecDirection` |
+
+`f` describes floating-point semantics, not a particular CLR type.
 
 `lib` is an intentional exception to the general `o` rule. A `Library` is the owning PicoGK runtime context and appears frequently enough that `lib` is clearer than `oLibrary`.
 
@@ -53,18 +47,36 @@ Scope or storage modifiers precede the semantic prefix:
 
 Use `readonly` for dependencies and state that should not be reassigned after construction.
 
-## Methods and properties
+## Properties and methods
 
-When applicable, a method name carries the prefix of its result:
+Property and method names carry the semantic prefix of their value or result.
 
-- `bIsInside()`
-- `nVertexCount()`
-- `voxFromMesh()`
-- `mshBuild()`
-- `vecSurfaceNormal()`
-- `oCreateSlice()`
+Use a **property** for stored state or trivial, inexpensive, side-effect-free computation:
 
-Use a property for stored state or trivial, inexpensive, side-effect-free computation. Use a method for native queries, substantive computation, mutation, or other work that should remain visible to the caller.
+```csharp
+public float fVoxelSizeMM { get; }
+
+public float fDiameterMM =>
+    2f * fRadiusMM;
+```
+
+Use a **method** for native queries, substantive computation, mutation, or other work that should remain visible to the caller:
+
+```csharp
+public bool bIsInside(Vector3 vecPoint)
+{
+    // Query the native geometry.
+}
+
+public Mesh mshBuild(Library lib)
+{
+    // Build and return a mesh.
+}
+```
+
+Other result-prefix examples include `nVertexCount()`, `voxFromMesh()`, `vecSurfaceNormal()`, and `oCreateSlice()`.
+
+A method returning `void` uses an unprefixed action name such as `Clear()`, `Offset()`, or `Dispose()`.
 
 ## Types and enums
 

@@ -91,16 +91,16 @@ internal static class NativeApi
     internal static unsafe SafeVoxelsHandle hCreateTubes(
         SafeLibraryHandle hLibrary,
         ReadOnlySpan<Vector3> avecVertices,
-        ReadOnlySpan<Segment> asegSegments,
+        ReadOnlySpan<Segment> aSegments,
         float fRadiusMM)
     {
         fixed (Vector3* pVertices = avecVertices)
-        fixed (Segment* pSegments = asegSegments)
+        fixed (Segment* pSegments = aSegments)
         {
             return hVoxels(hLibrary, NativeMethods.Voxels_hCreateTubes(
                 hLibrary,
                 pVertices, (uint)avecVertices.Length,
-                pSegments, (uint)asegSegments.Length,
+                pSegments, (uint)aSegments.Length,
                 fRadiusMM));
         }
     }
@@ -108,20 +108,20 @@ internal static class NativeApi
     internal static unsafe SafeVoxelsHandle hCreateTubes(
         SafeLibraryHandle hLibrary,
         ReadOnlySpan<Vector3> avecVertices,
-        ReadOnlySpan<Segment> asegSegments,
+        ReadOnlySpan<Segment> aSegments,
         ReadOnlySpan<float> afVertexRadiiMM)
     {
         if (avecVertices.Length != afVertexRadiiMM.Length)
             throw new ArgumentException("Tube vertex and radius arrays must have the same length.");
 
         fixed (Vector3* pVertices = avecVertices)
-        fixed (Segment* pSegments = asegSegments)
+        fixed (Segment* pSegments = aSegments)
         fixed (float* pRadiiMM = afVertexRadiiMM)
         {
             return hVoxels(hLibrary, NativeMethods.Voxels_hCreateVariableTubes(
                 hLibrary,
                 pVertices, pRadiiMM, (uint)avecVertices.Length,
-                pSegments, (uint)asegSegments.Length));
+                pSegments, (uint)aSegments.Length));
         }
     }
 

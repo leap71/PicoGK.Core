@@ -95,22 +95,22 @@ public sealed class Voxels : IDisposable
 
     public static Voxels voxFromTubes(Library lib,
                                       ReadOnlySpan<Vector3> avecVertices,
-                                      ReadOnlySpan<Segment> asegSegments,
+                                      ReadOnlySpan<Segment> aSegments,
                                       float fRadiusMM)
     {
         ArgumentNullException.ThrowIfNull(lib);
         return new Voxels(lib, NativeApi.hCreateTubes(
-            lib.hNative, avecVertices, asegSegments, fRadiusMM));
+            lib.hNative, avecVertices, aSegments, fRadiusMM));
     }
 
     public static Voxels voxFromTubes(Library lib,
                                       ReadOnlySpan<Vector3> avecVertices,
-                                      ReadOnlySpan<Segment> asegSegments,
+                                      ReadOnlySpan<Segment> aSegments,
                                       ReadOnlySpan<float> afVertexRadiiMM)
     {
         ArgumentNullException.ThrowIfNull(lib);
         return new Voxels(lib, NativeApi.hCreateTubes(
-            lib.hNative, avecVertices, asegSegments, afVertexRadiiMM));
+            lib.hNative, avecVertices, aSegments, afVertexRadiiMM));
     }
 
     public static Voxels voxFromMesh(Mesh msh)
