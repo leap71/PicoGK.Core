@@ -7,6 +7,10 @@ on:
     tags: [ 'v*' ]
   pull_request:
 
+# Jobs are read-only unless they explicitly request additional permissions.
+permissions:
+  contents: read
+
 jobs:
   native:
     strategy:
@@ -254,12 +258,34 @@ jobs:
           echo "PACKAGES_DIR=$packages_dir" >> "$GITHUB_ENV"
           echo "PICOGK_PACKAGE_VERSION=$version" >> "$GITHUB_ENV"
 
+          # Force PicoGK.Core to come from this workflow's artifact. Source
+          # ordering alone does not guarantee that NuGet selects the local copy.
+          config="$PWD/.package-test/NuGet.config"
+          mkdir -p "$(dirname "$config")"
+          cat > "$config" <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <packageSources>
+              <clear />
+              <add key="local" value="$PWD/artifacts/packages" />
+              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+            </packageSources>
+            <packageSourceMapping>
+              <packageSource key="local">
+                <package pattern="PicoGK.Core" />
+              </packageSource>
+              <packageSource key="nuget.org">
+                <package pattern="*" />
+              </packageSource>
+            </packageSourceMapping>
+          </configuration>
+          EOF
+
           dotnet restore tests/PicoGK.Core.PackageTests/PicoGK.Core.PackageTests.csproj \
+            --configfile "$config" \
             -p:RestorePackagesPath="$packages_dir" \
             -p:PicoGKPackageVersion="$version" \
-            -p:RuntimeIdentifier="${{ matrix.rid }}" \
-            --source "https://api.nuget.org/v3/index.json" \
-            --source "$PWD/artifacts/packages"
+            -p:RuntimeIdentifier="${{ matrix.rid }}"
 
       - name: Run package consumer tests
         shell: bash
@@ -274,9 +300,19 @@ jobs:
   publish:
     name: Publish to NuGet.org
     needs: package-test
-    if: startsWith(github.ref, 'refs/tags/')
+    if: >-
+      github.event_name == 'push' &&
+      github.ref_type == 'tag' &&
+      startsWith(github.ref_name, 'v') &&
+      github.repository == 'leap71/PicoGK.Core'
     runs-on: ubuntu-latest
     environment: release
+    concurrency:
+      group: nuget-${{ github.ref }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - uses: actions/download-artifact@v8
@@ -288,9 +324,31 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Select package
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          packages=(artifacts/packages/*.nupkg)
+          if [[ ${#packages[@]} -ne 1 ]]; then
+            echo "Expected exactly one .nupkg, found ${#packages[@]}."
+            exit 1
+          fi
+          echo "path=${packages[0]}" >> "$GITHUB_OUTPUT"
+
+      # Exchanges GitHub's OIDC token for a NuGet.org API key valid for one hour.
+      - name: Log in to NuGet.org
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
       - name: Push package
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+          PACKAGE_PATH: ${{ steps.package.outputs.path }}
         run: >-
-          dotnet nuget push artifacts/packages/*.nupkg
+          dotnet nuget push "$PACKAGE_PATH"
           --source https://api.nuget.org/v3/index.json
-          --api-key ${{ secrets.NUGET_API_KEY }}
-          --skip-duplicate
+          --api-key "$NUGET_API_KEY"
