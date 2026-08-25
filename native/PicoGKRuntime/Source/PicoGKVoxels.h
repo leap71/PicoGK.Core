@@ -174,7 +174,7 @@ public:
 
 private:
     class Impl;
-    std::unique_ptr<Impl> m_poImpl;
+    std::unique_ptr<Impl> m_roImpl;
 
     void EnsureReady() const;
     void ValidateGrid() const;
