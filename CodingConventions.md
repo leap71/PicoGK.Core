@@ -20,6 +20,7 @@ These conventions apply to first-party managed C# code in PicoGK, including mana
 | `tri` | `Triangle` | `triFace`, `triCurrent` |
 | `quad` | `Quad` | `quadFace`, `quadCurrent` |
 | `vec` | `Vector2` or `Vector3` | `vecPosition`, `vecDirection` |
+| `r` | `Rad` | `rAngle`, `rRotation` |
 
 `f` describes floating-point semantics, not a particular CLR type.
 
@@ -46,6 +47,29 @@ Scope or storage modifiers precede the semantic prefix:
 | `c_` | Constant or constant-like shared value | `c_nLimit`, `c_fTolerance` |
 
 Use `readonly` for dependencies and state that should not be reassigned after construction.
+
+### Public predefined values
+
+Public canonical values may omit `c_`; qualification by the declaring type already provides constant-like context.
+
+Omit the semantic type prefix only when the value has the declaring type:
+
+```csharp
+Frame3d.World       // Frame3d
+Rad.Zero            // Rad
+Rad.Quarter         // Rad
+Rad.Deg90           // Rad
+```
+
+When a public constant exposes another type, retain that type's semantic prefix:
+
+```csharp
+Rad.fToleranceDefault       // float
+SdfSlice.nHalfWidthVoxels   // int
+SdfSlice.nInsideBackground  // short
+```
+
+Do not duplicate platform constants merely to place them on another type; use `float.Tau` rather than `Rad.TwoPi`. Factories, methods, ordinary static state, and private implementation constants continue to use their normal semantic, storage, or `c_` prefixes.
 
 ## Properties and methods
 
@@ -103,6 +127,7 @@ Keep these exceptions narrow. Use descriptive prefixed names whenever scope, rol
 
 ## General practices
 
+- Name project-authored Markdown documentation files in PascalCase, such as `CodingConventions.md`. Keep ecosystem-standard root names such as `README.md` and `LICENSE` unchanged.
 - Enable nullable reference types.
 - Validate arguments explicitly at public API boundaries.
 - Document public contracts where behavior is not self-evident.

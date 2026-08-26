@@ -78,6 +78,7 @@ Export C ABI functions as `Subsystem_ResultPrefixAction`, such as `Mesh_bGetView
 
 ## Structure and formatting
 
+- Name project-authored Markdown documentation files in PascalCase, such as `CodingConventions.md`. Keep ecosystem-standard root names such as `README.md` and `LICENSE` unchanged.
 - Use C++20.
 - Put implementation details in the `PicoGK` namespace and translation-unit helpers in an anonymous namespace.
 - Include the corresponding project header first, then other project, third-party, and standard-library headers in separate groups.
