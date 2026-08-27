@@ -57,7 +57,7 @@ Omit the semantic type prefix only when the value has the declaring type:
 ```csharp
 Frame3d.World       // Frame3d
 Rad.Zero            // Rad
-Rad.Quarter         // Rad
+Rad.Deg180          // Rad
 Rad.Deg90           // Rad
 ```
 
