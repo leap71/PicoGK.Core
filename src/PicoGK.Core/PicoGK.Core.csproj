@@ -8,7 +8,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <PackageId>PicoGK.Core</PackageId>
-    <Version>3.0.0-alpha.1</Version>
+    <VersionPrefix>3.0.0</VersionPrefix>
+    <VersionSuffix>0.internal</VersionSuffix>
     <Authors>LEAP 71</Authors>
     <Company>LEAP 71</Company>
     <Description>Compact PicoGK computational geometry core.</Description>

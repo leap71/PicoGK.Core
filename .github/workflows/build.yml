@@ -119,7 +119,7 @@ jobs:
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             version="${GITHUB_REF_NAME#v}"
           else
-            version="3.0.0-alpha.1"
+            version="3.0.0-0.internal.${GITHUB_RUN_ID}.${GITHUB_RUN_ATTEMPT}"
           fi
 
           if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
@@ -158,6 +158,7 @@ jobs:
           -c Release
           --no-restore
           -p:Version="${{ steps.version.outputs.version }}"
+          -p:ContinuousIntegrationBuild=true
 
       - name: Pack
         run: >-
@@ -165,6 +166,7 @@ jobs:
           -c Release
           --no-build
           -p:Version="${{ steps.version.outputs.version }}"
+          -p:ContinuousIntegrationBuild=true
           -o artifacts/packages
 
       - name: Verify package runtime layout
