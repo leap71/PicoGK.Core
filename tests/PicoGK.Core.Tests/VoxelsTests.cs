@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 using System.Numerics;
 using PicoGK;
+using PicoGK.Geometry;
 using Xunit;
 
 namespace PicoGK.Core.Tests;
@@ -15,6 +16,7 @@ public class VoxelsTests
 
         Assert.True(vox.bIsEmpty());
         Assert.Equal(0f, vox.fCalculateVolume());
+        Assert.Equal(Bounds3d.Empty, vox.oCalculateBoundingBox());
     }
 
     [Fact]

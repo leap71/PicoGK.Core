@@ -134,10 +134,10 @@ PICOGK_API bool Mesh_bGetMemUsage(PKINSTANCE hInstance,
                                   PKMESH hThis,
                                   int64_t* pnBytes);
 
-/// Returns the Mesh axis-aligned bounding box in world coordinates [mm].
-PICOGK_API bool Mesh_bGetBoundingBox(PKINSTANCE hInstance,
-                                     PKMESH hThis,
-                                     PKBBox3* poBox);
+/// Returns the Mesh axis-aligned bounds in world coordinates [mm].
+PICOGK_API bool Mesh_bGetBounds(PKINSTANCE hInstance,
+                                PKMESH hThis,
+                                PKBounds3d* poBounds);
 
 /// Returns direct read-only views into immutable Mesh storage.
 ///

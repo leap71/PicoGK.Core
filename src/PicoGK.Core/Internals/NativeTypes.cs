@@ -5,10 +5,11 @@ using System.Runtime.InteropServices;
 namespace PicoGK;
 
 [StructLayout(LayoutKind.Sequential)]
-internal struct NativeBBox3
+internal struct NativeBounds3d
 {
     internal Vector3 vecMin;
     internal Vector3 vecMax;
+    internal uint    nHasValue;
 }
 
 [StructLayout(LayoutKind.Sequential)]

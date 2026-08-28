@@ -3,6 +3,7 @@
 #define PICOGK_MESH_H_
 
 #include "PicoGKApiTypes.h"
+#include "PicoGKBounds3d.h"
 
 #include <atomic>
 #include <cstdint>
@@ -42,8 +43,8 @@ public:
     /// Returns estimated native memory owned by this Mesh [bytes].
     int64_t nMemUsage() const;
 
-    /// Returns the immutable world-space bounding box [mm].
-    const PKBBox3& oBBox() const { return m_oBBox; }
+    /// Returns the immutable world-space bounds [mm].
+    const Bounds3d& oBounds() const noexcept { return m_oBounds; }
 
     const std::vector<PKVector3>& aVertices() const { return m_aVertices; }
     const std::vector<PKTriangle>& aTriangles() const { return m_aTriangles; }
@@ -61,10 +62,10 @@ public:
 
 private:
     void Validate() const;
-    void BuildBoundingBox();
+    void BuildBounds();
     void BuildTriangulatedCache() const;
 
-    PKBBox3 m_oBBox{};
+    Bounds3d m_oBounds;
     std::vector<PKVector3> m_aVertices;
     std::vector<PKTriangle> m_aTriangles;
     std::vector<PKQuad> m_aQuads;

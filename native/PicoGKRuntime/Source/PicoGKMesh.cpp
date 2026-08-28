@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 #include "PicoGKMesh.h"
 
-#include <algorithm>
 #include <limits>
 #include <stdexcept>
 
@@ -36,7 +35,7 @@ Mesh::Mesh(const PKVector3* pVertices,
       m_aQuads(aCopy(pQuads, nQuads))
 {
     Validate();
-    BuildBoundingBox();
+    BuildBounds();
 }
 
 Mesh::Mesh(std::vector<PKVector3>&& aVertices,
@@ -47,7 +46,7 @@ Mesh::Mesh(std::vector<PKVector3>&& aVertices,
       m_aQuads(std::move(aQuads))
 {
     Validate();
-    BuildBoundingBox();
+    BuildBounds();
 }
 
 void Mesh::Validate() const
@@ -85,26 +84,11 @@ void Mesh::Validate() const
     }
 }
 
-void Mesh::BuildBoundingBox()
+void Mesh::BuildBounds()
 {
-    if (m_aVertices.empty())
-    {
-        m_oBBox = {};
-        return;
-    }
-
-    m_oBBox.vecMin = m_aVertices.front();
-    m_oBBox.vecMax = m_aVertices.front();
-
+    m_oBounds = {};
     for (const PKVector3& vec : m_aVertices)
-    {
-        m_oBBox.vecMin.X = std::min(m_oBBox.vecMin.X, vec.X);
-        m_oBBox.vecMin.Y = std::min(m_oBBox.vecMin.Y, vec.Y);
-        m_oBBox.vecMin.Z = std::min(m_oBBox.vecMin.Z, vec.Z);
-        m_oBBox.vecMax.X = std::max(m_oBBox.vecMax.X, vec.X);
-        m_oBBox.vecMax.Y = std::max(m_oBBox.vecMax.Y, vec.Y);
-        m_oBBox.vecMax.Z = std::max(m_oBBox.vecMax.Z, vec.Z);
-    }
+        m_oBounds.Include(vec);
 }
 
 void Mesh::BuildTriangulatedCache() const

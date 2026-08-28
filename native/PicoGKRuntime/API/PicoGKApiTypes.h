@@ -50,12 +50,17 @@ typedef struct PKQuad
     uint32_t D;
 } PKQuad;
 
-/// Axis-aligned bounding box in PicoGK world coordinates [mm].
-typedef struct PKBBox3
+/// Axis-aligned bounds in PicoGK world coordinates [mm].
+///
+/// nHasValue is zero for empty bounds and one for non-empty bounds. Extrema are
+/// unspecified for empty bounds. A zero-size bounds containing one point is
+/// non-empty.
+typedef struct PKBounds3d
 {
     PKVector3 vecMin;
     PKVector3 vecMax;
-} PKBBox3;
+    uint32_t  nHasValue;
+} PKBounds3d;
 
 /// Canonical PicoGK signed-distance encoding.
 ///
@@ -153,7 +158,7 @@ static_assert(sizeof(PKHANDLE)   == 8);
 static_assert(sizeof(PKVector3)  == 12);
 static_assert(sizeof(PKTriangle) == 12);
 static_assert(sizeof(PKQuad)     == 16);
-static_assert(sizeof(PKBBox3)    == 24);
+static_assert(sizeof(PKBounds3d) == 28);
 static_assert(sizeof(PKSegment)  == 8);
 
 static_assert(std::is_standard_layout_v<PKVector3>);
@@ -162,6 +167,8 @@ static_assert(std::is_standard_layout_v<PKTriangle>);
 static_assert(std::is_trivially_copyable_v<PKTriangle>);
 static_assert(std::is_standard_layout_v<PKQuad>);
 static_assert(std::is_trivially_copyable_v<PKQuad>);
+static_assert(std::is_standard_layout_v<PKBounds3d>);
+static_assert(std::is_trivially_copyable_v<PKBounds3d>);
 static_assert(std::is_standard_layout_v<PKSdfSlice>);
 static_assert(std::is_trivially_copyable_v<PKSdfSlice>);
 static_assert(std::is_standard_layout_v<PKSdfVolumeDesc>);

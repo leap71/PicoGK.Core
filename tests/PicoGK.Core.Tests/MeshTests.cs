@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 using System.Numerics;
 using PicoGK;
+using PicoGK.Geometry;
 using Xunit;
 
 namespace PicoGK.Core.Tests;
@@ -42,5 +43,45 @@ public class MeshTests
         Assert.Equal(4, oTriangulated.avecVertices.Length);
         Assert.Equal(2, oTriangulated.atriTriangles.Length);
         Assert.Equal(2, msh.nTriangulatedTriangleCount());
+    }
+
+    [Fact]
+    public void EmptyMesh_HasEmptyBounds()
+    {
+        using Library lib = new(TestHelpers.fVoxelSizeMM);
+        using Mesh msh = new MeshBuilder().mshBuild(lib);
+
+        IBounded3d oBounded = msh;
+        Assert.True(oBounded.oBounds.bIsEmpty);
+    }
+
+    [Fact]
+    public void OriginVertex_HasNonEmptyZeroSizeBounds()
+    {
+        MeshBuilder bld = new();
+        bld.nAddVertex(Vector3.Zero);
+
+        using Library lib = new(TestHelpers.fVoxelSizeMM);
+        using Mesh msh = bld.mshBuild(lib);
+
+        Bounds3d oBounds = msh.oBounds;
+        Assert.False(oBounds.bIsEmpty);
+        Assert.Equal(Vector3.Zero, oBounds.vecMin);
+        Assert.Equal(Vector3.Zero, oBounds.vecMax);
+        Assert.Equal(Vector3.Zero, oBounds.vecSize);
+    }
+
+    [Fact]
+    public void MeshBounds_ContainAllVertices()
+    {
+        MeshBuilder bld = new();
+        bld.nAddVertex(new Vector3(-2f, 4f, 1f));
+        bld.nAddVertex(new Vector3(3f, -5f, 7f));
+
+        using Library lib = new(TestHelpers.fVoxelSizeMM);
+        using Mesh msh = bld.mshBuild(lib);
+
+        Assert.Equal(new Vector3(-2f, -5f, 1f), msh.oBounds.vecMin);
+        Assert.Equal(new Vector3(3f, 4f, 7f), msh.oBounds.vecMax);
     }
 }

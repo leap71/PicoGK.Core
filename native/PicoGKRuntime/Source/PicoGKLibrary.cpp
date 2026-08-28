@@ -120,6 +120,18 @@ int32_t nMmToVoxel(float fMM, float fVoxelSizeMM)
     return static_cast<int32_t>(std::lround(fMM / fVoxelSizeMM));
 }
 
+PKBounds3d oToApiBounds(const PicoGK::Bounds3d& oBounds)
+{
+    PKBounds3d oResult{};
+    if (oBounds.bIsEmpty())
+        return oResult;
+
+    oResult.vecMin = oBounds.vecMin();
+    oResult.vecMax = oBounds.vecMax();
+    oResult.nHasValue = 1;
+    return oResult;
+}
+
 enum class ESliceAxis
 {
     X,
@@ -410,13 +422,13 @@ PICOGK_API bool Mesh_bGetMemUsage(PKINSTANCE hInstance, PKMESH hThis, int64_t* p
     });
 }
 
-PICOGK_API bool Mesh_bGetBoundingBox(PKINSTANCE hInstance, PKMESH hThis, PKBBox3* poBox)
+PICOGK_API bool Mesh_bGetBounds(PKINSTANCE hInstance, PKMESH hThis, PKBounds3d* poBounds)
 {
-    if (poBox) *poBox = {};
+    if (poBounds) *poBounds = {};
     return ApiBoundary::Run(false, [&]
     {
-        if (!poBox) throw std::invalid_argument("Bounding box output pointer is null");
-        *poBox = roMesh(hInstance, hThis)->oBBox();
+        if (!poBounds) throw std::invalid_argument("Bounds output pointer is null");
+        *poBounds = oToApiBounds(roMesh(hInstance, hThis)->oBounds());
         return true;
     });
 }

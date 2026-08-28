@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 using System.Numerics;
+using PicoGK.Geometry;
 
 namespace PicoGK;
 
 /// <summary>
 /// Immutable polygon mesh preserving triangles and quads.
 /// </summary>
-public sealed class Mesh : IDisposable
+public sealed class Mesh : IDisposable, IBounded3d
 {
     internal readonly Library lib;
     internal readonly SafeMeshHandle hNative;
@@ -50,11 +51,18 @@ public sealed class Mesh : IDisposable
         return nBytes;
     }
 
-    /// <summary>Returns the immutable world-space bounding box in millimetres.</summary>
-    public BBox3 oBoundingBox()
+    /// <summary>Immutable world-space bounds in millimetres, which may be empty.</summary>
+    public Bounds3d oBounds
     {
-        NativeApi.Check(NativeMethods.Mesh_bGetBoundingBox(lib.hNative, hNative, out NativeBBox3 oBox));
-        return new BBox3(oBox.vecMin, oBox.vecMax);
+        get
+        {
+            NativeApi.Check(NativeMethods.Mesh_bGetBounds(
+                lib.hNative, hNative, out NativeBounds3d oBounds));
+
+            return oBounds.nHasValue == 0
+                ? Bounds3d.Empty
+                : new Bounds3d(oBounds.vecMin, oBounds.vecMax);
+        }
     }
 
     /// <summary>

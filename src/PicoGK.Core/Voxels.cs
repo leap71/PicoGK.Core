@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 using System.Numerics;
 using System.Text;
+using PicoGK.Geometry;
 
 namespace PicoGK;
 
@@ -136,18 +137,15 @@ public sealed class Voxels : IDisposable
         return new Mesh(lib, NativeApi.hMesh(lib.hNative, h));
     }
 
-    /// <summary>
-    /// Returns the bounding box of the actual zero isosurface.
-    ///
-    /// This intentionally derives the box from the extracted Mesh rather than
-    /// from OpenVDB active-value bounds. Narrow-band grids can retain values
-    /// away from the actual surface, so active topology is not a sufficiently
-    /// clear definition of geometric extent.
-    /// </summary>
-    public BBox3 oBoundingBox()
+    /// <summary>Calculates the bounds of the extracted zero isosurface.</summary>
+    /// <remarks>
+    /// This operation extracts a temporary surface Mesh and may be expensive.
+    /// Empty Voxels return <see cref="Bounds3d.Empty"/>.
+    /// </remarks>
+    public Bounds3d oCalculateBoundingBox()
     {
         using Mesh msh = mshAsMesh();
-        return msh.oBoundingBox();
+        return msh.oBounds;
     }
 
     // Boolean operations ------------------------------------------------------

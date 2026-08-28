@@ -103,9 +103,9 @@ internal static unsafe class NativeMethods
     [return: MarshalAs(UnmanagedType.I1)]
     internal static extern bool Mesh_bGetMemUsage(SafeLibraryHandle hInstance, SafeMeshHandle hThis, out long nBytes);
 
-    [DllImport(strLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Mesh_bGetBoundingBox")]
+    [DllImport(strLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Mesh_bGetBounds")]
     [return: MarshalAs(UnmanagedType.I1)]
-    internal static extern bool Mesh_bGetBoundingBox(SafeLibraryHandle hInstance, SafeMeshHandle hThis, out NativeBBox3 oBox);
+    internal static extern bool Mesh_bGetBounds(SafeLibraryHandle hInstance, SafeMeshHandle hThis, out NativeBounds3d oBounds);
 
     [DllImport(strLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "Mesh_bGetView")]
     [return: MarshalAs(UnmanagedType.I1)]
