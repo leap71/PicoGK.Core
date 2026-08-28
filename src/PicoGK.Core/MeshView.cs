@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 using System.Numerics;
+using PicoGK.Geometry;
 
 namespace PicoGK;
 
