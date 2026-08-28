@@ -32,14 +32,14 @@ public sealed class Mesh : IDisposable, IBounded3d
         return new Mesh(lib, NativeApi.hCreateMesh(lib.hNative, avecVertices, atriTriangles, aquadQuads));
     }
 
-    /// <summary>Returns the number of vertices in the original Mesh.</summary>
-    public int nVertexCount() => oView().avecVertices.Length;
+    /// <summary>Number of vertices in the original Mesh.</summary>
+    public int nVertexCount => oView().avecVertices.Length;
 
-    /// <summary>Returns the number of original triangles in the Mesh.</summary>
-    public int nTriangleCount() => oView().atriTriangles.Length;
+    /// <summary>Number of original triangles in the Mesh.</summary>
+    public int nTriangleCount => oView().atriTriangles.Length;
 
-    /// <summary>Returns the number of original quads in the Mesh.</summary>
-    public int nQuadCount() => oView().aquadQuads.Length;
+    /// <summary>Number of original quads in the Mesh.</summary>
+    public int nQuadCount => oView().aquadQuads.Length;
 
     /// <summary>Returns the triangle count after lazily triangulating all quads.</summary>
     public int nTriangulatedTriangleCount() => oTriangulatedView().atriTriangles.Length;

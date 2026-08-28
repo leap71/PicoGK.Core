@@ -75,7 +75,7 @@ Do not duplicate platform constants merely to place them on another type; use `f
 
 Property and method names carry the semantic prefix of their value or result.
 
-Use a **property** for stored state or trivial, inexpensive, side-effect-free computation:
+Use a **property** for a conceptual attribute whose retrieval is side-effect-free, inexpensive, and suitable for repeated access. Stored values, simple arithmetic, cached values, and constant-time native lookups may be properties:
 
 ```csharp
 public float fVoxelSizeMM { get; }
@@ -84,7 +84,7 @@ public float fDiameterMM =>
     2f * fRadiusMM;
 ```
 
-Use a **method** for native queries, substantive computation, mutation, or other work that should remain visible to the caller:
+Use a **method** for substantive computation, mutation, potentially expensive or implementation-dependent queries, or other work that should remain visible to the caller:
 
 ```csharp
 public bool bIsInside(Vector3 vecPoint)
@@ -92,13 +92,15 @@ public bool bIsInside(Vector3 vecPoint)
     // Query the native geometry.
 }
 
-public Mesh mshBuild(Library lib)
+public long nMemUsage()
 {
-    // Build and return a mesh.
+    // Query implementation-dependent memory use.
 }
 ```
 
-Other result-prefix examples include `nVertexCount()`, `voxFromMesh()`, `vecSurfaceNormal()`, and `oCreateSlice()`.
+The managed/native boundary alone does not determine whether an API is a property or method. Established numerical-operation conventions may also justify a method, such as `bIsFinite()`.
+
+Other examples include the `nVertexCount` property and the `voxFromMesh()`, `vecSurfaceNormal()`, and `oCreateSlice()` methods.
 
 A method returning `void` uses an unprefixed action name such as `Clear()`, `Offset()`, or `Dispose()`.
 

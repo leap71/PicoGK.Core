@@ -14,7 +14,7 @@ public class VoxelsTests
         using Library lib = new(TestHelpers.fVoxelSizeMM);
         using Voxels vox = new(lib);
 
-        Assert.True(vox.bIsEmpty());
+        Assert.True(vox.bIsEmpty);
         Assert.Equal(0f, vox.fCalculateVolume());
         Assert.Equal(Bounds3d.Empty, vox.oCalculateBoundingBox());
     }
@@ -26,7 +26,7 @@ public class VoxelsTests
         const float fRadius = 10f;
         using Voxels vox = Voxels.voxFromSphere(lib, Vector3.Zero, fRadius);
 
-        Assert.False(vox.bIsEmpty());
+        Assert.False(vox.bIsEmpty);
         Assert.True(vox.bIsInside(Vector3.Zero));
         Assert.False(vox.bIsInside(new Vector3(20f, 0f, 0f)));
 

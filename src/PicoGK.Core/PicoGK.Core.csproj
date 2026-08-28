@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../../PicoGK.Geometry/src/PicoGK.Geometry/PicoGK.Geometry.csproj" />
+    <PackageReference Include="PicoGK.Geometry" Version="[1.0.0-alpha.2]" />
   </ItemGroup>
 
   <ItemGroup>

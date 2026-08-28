@@ -36,28 +36,37 @@ public sealed class Library : IDisposable
         m_oTimerMemCheck  = oCreateMemoryTimer(this);
     }
 
-    /// <summary>Returns the PicoGK native runtime name.</summary>
-    public static string strName()
+    /// <summary>PicoGK native runtime name.</summary>
+    public static string strName
     {
-        StringBuilder str = new(NativeApi.nInfoStringLength);
-        NativeApi.Check(NativeMethods.Library_bGetName(str));
-        return str.ToString();
+        get
+        {
+            StringBuilder str = new(NativeApi.nInfoStringLength);
+            NativeApi.Check(NativeMethods.Library_bGetName(str));
+            return str.ToString();
+        }
     }
 
-    /// <summary>Returns the PicoGK native runtime version.</summary>
-    public static string strVersion()
+    /// <summary>PicoGK native runtime version.</summary>
+    public static string strVersion
     {
-        StringBuilder str = new(NativeApi.nInfoStringLength);
-        NativeApi.Check(NativeMethods.Library_bGetVersion(str));
-        return str.ToString();
+        get
+        {
+            StringBuilder str = new(NativeApi.nInfoStringLength);
+            NativeApi.Check(NativeMethods.Library_bGetVersion(str));
+            return str.ToString();
+        }
     }
 
-    /// <summary>Returns native runtime build information.</summary>
-    public static string strBuildInfo()
+    /// <summary>Native runtime build information.</summary>
+    public static string strBuildInfo
     {
-        StringBuilder str = new(NativeApi.nInfoStringLength);
-        NativeApi.Check(NativeMethods.Library_bGetBuildInfo(str));
-        return str.ToString();
+        get
+        {
+            StringBuilder str = new(NativeApi.nInfoStringLength);
+            NativeApi.Check(NativeMethods.Library_bGetBuildInfo(str));
+            return str.ToString();
+        }
     }
 
     /// <summary>Returns total native memory owned by this Library, in bytes.</summary>
@@ -81,18 +90,24 @@ public sealed class Library : IDisposable
         return nBytes;
     }
 
-    /// <summary>Returns the number of native Mesh objects owned by this Library.</summary>
-    public long nMeshesAllocated()
+    /// <summary>Number of native Mesh objects owned by this Library.</summary>
+    public long nMeshesAllocated
     {
-        NativeApi.Check(NativeMethods.Library_bGetMeshesAllocated(hNative, out long nCount));
-        return nCount;
+        get
+        {
+            NativeApi.Check(NativeMethods.Library_bGetMeshesAllocated(hNative, out long nCount));
+            return nCount;
+        }
     }
 
-    /// <summary>Returns the number of native Voxels objects owned by this Library.</summary>
-    public long nVoxelsAllocated()
+    /// <summary>Number of native Voxels objects owned by this Library.</summary>
+    public long nVoxelsAllocated
     {
-        NativeApi.Check(NativeMethods.Library_bGetVoxelsAllocated(hNative, out long nCount));
-        return nCount;
+        get
+        {
+            NativeApi.Check(NativeMethods.Library_bGetVoxelsAllocated(hNative, out long nCount));
+            return nCount;
+        }
     }
 
     /// <summary>Converts voxel-index coordinates to world coordinates in millimetres.</summary>

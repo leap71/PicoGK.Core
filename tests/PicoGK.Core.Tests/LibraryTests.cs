@@ -13,8 +13,8 @@ public class LibraryTests
         using Library lib = new(TestHelpers.fVoxelSizeMM);
 
         Assert.Equal(TestHelpers.fVoxelSizeMM, lib.fVoxelSizeMM);
-        Assert.False(string.IsNullOrWhiteSpace(Library.strName()));
-        Assert.False(string.IsNullOrWhiteSpace(Library.strVersion()));
+        Assert.False(string.IsNullOrWhiteSpace(Library.strName));
+        Assert.False(string.IsNullOrWhiteSpace(Library.strVersion));
     }
 
     [Fact]
@@ -24,8 +24,8 @@ public class LibraryTests
         Voxels vox = Voxels.voxFromSphere(lib, Vector3.Zero, 5f);
         Mesh msh = vox.mshAsMesh();
 
-        Assert.Equal(1L, lib.nVoxelsAllocated());
-        Assert.Equal(1L, lib.nMeshesAllocated());
+        Assert.Equal(1L, lib.nVoxelsAllocated);
+        Assert.Equal(1L, lib.nMeshesAllocated);
 
         // Library disposal is authoritative. Disposing child wrappers afterwards
         // must remain safe and must not double-free native objects.

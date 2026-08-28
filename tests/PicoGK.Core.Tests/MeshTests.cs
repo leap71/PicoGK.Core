@@ -15,8 +15,8 @@ public class MeshTests
         using Voxels vox = Voxels.voxFromSphere(lib, Vector3.Zero, 8f);
         using Mesh msh = vox.mshAsMesh();
 
-        Assert.True(msh.nVertexCount() > 0);
-        Assert.True(msh.nTriangleCount() + msh.nQuadCount() > 0);
+        Assert.True(msh.nVertexCount > 0);
+        Assert.True(msh.nTriangleCount + msh.nQuadCount > 0);
     }
 
     [Fact]

@@ -341,10 +341,13 @@ public sealed class Voxels : IDisposable
 
     // Queries -----------------------------------------------------------------
 
-    public bool bIsEmpty()
+    public bool bIsEmpty
     {
-        NativeApi.Check(NativeMethods.Voxels_bGetIsEmpty(lib.hNative, hNative, out bool bEmpty));
-        return bEmpty;
+        get
+        {
+            NativeApi.Check(NativeMethods.Voxels_bGetIsEmpty(lib.hNative, hNative, out bool bEmpty));
+            return bEmpty;
+        }
     }
 
     public bool bIsInside(in Vector3 vecTestPoint)

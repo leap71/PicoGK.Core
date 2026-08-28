@@ -35,9 +35,9 @@ public sealed class MeshBuilder
         m_aquadQuads    = new List<Quad>(nQuadCapacity);
     }
 
-    public int nVertexCount()   => m_avecVertices.Count;
-    public int nTriangleCount() => m_atriTriangles.Count;
-    public int nQuadCount()     => m_aquadQuads.Count;
+    public int nVertexCount   => m_avecVertices.Count;
+    public int nTriangleCount => m_atriTriangles.Count;
+    public int nQuadCount     => m_aquadQuads.Count;
 
     /// <summary>Adds a vertex and returns its zero-based index.</summary>
     public uint nAddVertex(Vector3 vecVertex)
