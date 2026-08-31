@@ -176,6 +176,46 @@ internal static class NativeApi
         }
     }
 
+    internal static SafeVoxelsHandle hBeginSdfImport(
+        SafeLibraryHandle hLibrary,
+        in NativeSdfVolumeDesc oVolume)
+    {
+        return hVoxels(
+            hLibrary,
+            NativeMethods.Voxels_hBeginSdfImport(hLibrary, in oVolume));
+    }
+
+    internal static unsafe void ImportSdfZSlice(
+        SafeLibraryHandle hLibrary,
+        SafeVoxelsHandle hVoxels,
+        int nZSlice,
+        SdfSlice oSlice)
+    {
+        fixed (short* pValues = oSlice.anValues)
+        {
+            NativeSdfSlice oNativeSlice = new()
+            {
+                pValues = pValues,
+                nValueCapacity = (ulong)oSlice.nCapacity,
+                nWidth = checked((uint)oSlice.nWidth),
+                nHeight = checked((uint)oSlice.nHeight)
+            };
+
+            Check(NativeMethods.Voxels_bImportSdfZSlice(
+                hLibrary,
+                hVoxels,
+                checked((uint)nZSlice),
+                in oNativeSlice));
+        }
+    }
+
+    internal static void EndSdfImport(
+        SafeLibraryHandle hLibrary,
+        SafeVoxelsHandle hVoxels)
+    {
+        Check(NativeMethods.Voxels_bEndSdfImport(hLibrary, hVoxels));
+    }
+
     internal static string strLastError()
     {
         StringBuilder str = new(nInfoStringLength);
