@@ -34,7 +34,7 @@ The project is the spiritual successor to PicoGKRuntime 2.x and is being develop
 
 Managed code follows the [C# Coding Conventions](CodingConventions.md). First-party native code follows the [C++ Coding Conventions](native/CodingConventions.md).
 
-The deliberately narrow `.picovox` voxel exchange format is specified in [PicoVox v1](PicovoxFormat.md).
+The native exchange formats are specified in [PicoMsh v1](PicoMshFormat.md) for lossless meshes and [PicoVox v1](PicoVoxFormat.md) for voxel data.
 
 ## License
 
