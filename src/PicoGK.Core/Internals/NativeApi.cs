@@ -218,9 +218,9 @@ internal static class NativeApi
 
     internal static string strLastError()
     {
-        StringBuilder str = new(nInfoStringLength);
-        return NativeMethods.Library_bGetLastError(str, str.Capacity)
-            ? str.ToString()
+        StringBuilder oSb = new(nInfoStringLength);
+        return NativeMethods.Library_bGetLastError(oSb, oSb.Capacity)
+            ? oSb.ToString()
             : "Unknown PicoGK native error.";
     }
 

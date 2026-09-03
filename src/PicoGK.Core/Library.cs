@@ -41,9 +41,9 @@ public sealed class Library : IDisposable
     {
         get
         {
-            StringBuilder str = new(NativeApi.nInfoStringLength);
-            NativeApi.Check(NativeMethods.Library_bGetName(str));
-            return str.ToString();
+            StringBuilder oSb = new(NativeApi.nInfoStringLength);
+            NativeApi.Check(NativeMethods.Library_bGetName(oSb));
+            return oSb.ToString();
         }
     }
 
@@ -52,9 +52,9 @@ public sealed class Library : IDisposable
     {
         get
         {
-            StringBuilder str = new(NativeApi.nInfoStringLength);
-            NativeApi.Check(NativeMethods.Library_bGetVersion(str));
-            return str.ToString();
+            StringBuilder oSb = new(NativeApi.nInfoStringLength);
+            NativeApi.Check(NativeMethods.Library_bGetVersion(oSb));
+            return oSb.ToString();
         }
     }
 
@@ -63,9 +63,9 @@ public sealed class Library : IDisposable
     {
         get
         {
-            StringBuilder str = new(NativeApi.nInfoStringLength);
-            NativeApi.Check(NativeMethods.Library_bGetBuildInfo(str));
-            return str.ToString();
+            StringBuilder oSb = new(NativeApi.nInfoStringLength);
+            NativeApi.Check(NativeMethods.Library_bGetBuildInfo(oSb));
+            return oSb.ToString();
         }
     }
 

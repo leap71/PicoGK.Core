@@ -495,10 +495,10 @@ public sealed class Voxels : IDisposable
     /// </summary>
     public string strDiagnose()
     {
-        StringBuilder str = new(NativeApi.nInfoStringLength);
+        StringBuilder oSb = new(NativeApi.nInfoStringLength);
         NativeApi.Check(NativeMethods.Voxels_bDiagnose(
-            lib.hNative, hNative, out bool bHealthy, str));
-        return bHealthy ? string.Empty : str.ToString();
+            lib.hNative, hNative, out bool bHealthy, oSb));
+        return bHealthy ? string.Empty : oSb.ToString();
     }
 
     // Helpers -----------------------------------------------------------------

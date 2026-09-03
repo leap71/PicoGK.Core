@@ -7,17 +7,17 @@ namespace PicoGK;
 
 internal static class PicovoxPng
 {
-    static readonly byte[] s_anSignature = [137, 80, 78, 71, 13, 10, 26, 10];
-    static readonly byte[] s_anIhdr = "IHDR"u8.ToArray();
-    static readonly byte[] s_anIdat = "IDAT"u8.ToArray();
-    static readonly byte[] s_anIend = "IEND"u8.ToArray();
+    static readonly byte[] c_anSignature = [137, 80, 78, 71, 13, 10, 26, 10];
+    static readonly byte[] c_anIhdr = "IHDR"u8.ToArray();
+    static readonly byte[] c_anIdat = "IDAT"u8.ToArray();
+    static readonly byte[] c_anIend = "IEND"u8.ToArray();
 
     internal static void Write(Stream oOutput, SdfSlice oSlice)
     {
         ArgumentNullException.ThrowIfNull(oOutput);
         ArgumentNullException.ThrowIfNull(oSlice);
 
-        oOutput.Write(s_anSignature);
+        oOutput.Write(c_anSignature);
 
         byte[] anHeader = new byte[13];
         BinaryPrimitives.WriteUInt32BigEndian(anHeader.AsSpan(0, 4), checked((uint)oSlice.nWidth));
@@ -27,7 +27,7 @@ internal static class PicovoxPng
         anHeader[10] = 0; // zlib/Deflate
         anHeader[11] = 0; // adaptive filtering method
         anHeader[12] = 0; // non-interlaced
-        WriteChunk(oOutput, s_anIhdr, anHeader);
+        WriteChunk(oOutput, c_anIhdr, anHeader);
 
         using (PngIdatWriteStream oIdat = new(oOutput))
         {
@@ -54,7 +54,7 @@ internal static class PicovoxPng
             }
         }
 
-        WriteChunk(oOutput, s_anIend, ReadOnlySpan<byte>.Empty);
+        WriteChunk(oOutput, c_anIend, ReadOnlySpan<byte>.Empty);
     }
 
     internal static void Read(Stream oInput, SdfSlice oSlice)
@@ -62,13 +62,13 @@ internal static class PicovoxPng
         ArgumentNullException.ThrowIfNull(oInput);
         ArgumentNullException.ThrowIfNull(oSlice);
 
-        byte[] anSignature = new byte[s_anSignature.Length];
+        byte[] anSignature = new byte[c_anSignature.Length];
         ReadExactly(oInput, anSignature);
-        if (!anSignature.AsSpan().SequenceEqual(s_anSignature))
+        if (!anSignature.AsSpan().SequenceEqual(c_anSignature))
             throw new InvalidDataException("Invalid PicoVox PNG signature.");
 
         PngChunkHeader oHeader = oReadChunkHeader(oInput);
-        if (!oHeader.anType.AsSpan().SequenceEqual(s_anIhdr) || oHeader.nLength != 13)
+        if (!oHeader.anType.AsSpan().SequenceEqual(c_anIhdr) || oHeader.nLength != 13)
             throw new InvalidDataException("A PicoVox PNG must begin with a 13-byte IHDR chunk.");
 
         byte[] anIhdr = new byte[13];
@@ -85,7 +85,7 @@ internal static class PicovoxPng
         }
 
         PngChunkHeader oFirstIdat = oReadChunkHeader(oInput);
-        if (!oFirstIdat.anType.AsSpan().SequenceEqual(s_anIdat))
+        if (!oFirstIdat.anType.AsSpan().SequenceEqual(c_anIdat))
             throw new InvalidDataException("IHDR must be followed immediately by IDAT.");
 
         using PngIdatReadStream oIdat = new(oInput, oFirstIdat.nLength);
@@ -225,7 +225,7 @@ internal static class PicovoxPng
         {
             if (m_nCount == 0)
                 return;
-            WriteChunk(m_oOutput, s_anIdat, m_anBuffer.AsSpan(0, m_nCount));
+            WriteChunk(m_oOutput, c_anIdat, m_anBuffer.AsSpan(0, m_nCount));
             m_nCount = 0;
         }
 
@@ -269,17 +269,17 @@ internal static class PicovoxPng
             {
                 ValidateCrc(m_oInput, m_oCrc.nValue);
                 PngChunkHeader oNext = oReadChunkHeader(m_oInput);
-                if (oNext.anType.AsSpan().SequenceEqual(s_anIdat))
+                if (oNext.anType.AsSpan().SequenceEqual(c_anIdat))
                 {
                     BeginIdat(oNext.nLength);
                     continue;
                 }
 
-                if (!oNext.anType.AsSpan().SequenceEqual(s_anIend) || oNext.nLength != 0)
+                if (!oNext.anType.AsSpan().SequenceEqual(c_anIend) || oNext.nLength != 0)
                     throw new InvalidDataException("Consecutive IDAT chunks must be followed by a zero-length IEND.");
 
                 PngCrc32 oIendCrc = new();
-                oIendCrc.Append(s_anIend);
+                oIendCrc.Append(c_anIend);
                 ValidateCrc(m_oInput, oIendCrc.nValue);
                 if (m_oInput.ReadByte() != -1)
                     throw new InvalidDataException("A PicoVox PNG contains data after IEND.");
@@ -309,7 +309,7 @@ internal static class PicovoxPng
         {
             m_nRemaining = nLength;
             m_oCrc = new PngCrc32();
-            m_oCrc.Append(s_anIdat);
+            m_oCrc.Append(c_anIdat);
         }
 
         public override void Flush() { }
@@ -321,7 +321,7 @@ internal static class PicovoxPng
     struct PngCrc32
     {
         const uint c_nPolynomial = 0xedb88320u;
-        static readonly uint[] s_anTable = aCreateTable();
+        static readonly uint[] c_anTable = aCreateTable();
         uint m_nCrc;
         bool m_bInitialized;
 
@@ -336,7 +336,7 @@ internal static class PicovoxPng
             }
 
             foreach (byte nByte in anBytes)
-                m_nCrc = s_anTable[(m_nCrc ^ nByte) & 0xff] ^ (m_nCrc >> 8);
+                m_nCrc = c_anTable[(m_nCrc ^ nByte) & 0xff] ^ (m_nCrc >> 8);
         }
 
         static uint[] aCreateTable()

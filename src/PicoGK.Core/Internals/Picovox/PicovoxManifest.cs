@@ -83,17 +83,17 @@ internal readonly record struct PicovoxManifest(
 
     internal void Write(ZipArchiveEntry oEntry)
     {
-        StringBuilder str = new();
-        str.Append("PicoVoxVersion: ").Append(c_nVersion).Append('\n');
-        str.Append("VoxelSizeMM: ").Append(fVoxelSizeMM.ToString("R", CultureInfo.InvariantCulture)).Append('\n');
-        str.Append("OriginX: ").Append(nXOrigin.ToString(CultureInfo.InvariantCulture)).Append('\n');
-        str.Append("OriginY: ").Append(nYOrigin.ToString(CultureInfo.InvariantCulture)).Append('\n');
-        str.Append("OriginZ: ").Append(nZOrigin.ToString(CultureInfo.InvariantCulture)).Append('\n');
-        str.Append("SizeX: ").Append(nXSize.ToString(CultureInfo.InvariantCulture)).Append('\n');
-        str.Append("SizeY: ").Append(nYSize.ToString(CultureInfo.InvariantCulture)).Append('\n');
-        str.Append("SizeZ: ").Append(nZSize.ToString(CultureInfo.InvariantCulture)).Append('\n');
+        StringBuilder oSb = new();
+        oSb.Append("PicoVoxVersion: ").Append(c_nVersion).Append('\n');
+        oSb.Append("VoxelSizeMM: ").Append(fVoxelSizeMM.ToString("R", CultureInfo.InvariantCulture)).Append('\n');
+        oSb.Append("OriginX: ").Append(nXOrigin.ToString(CultureInfo.InvariantCulture)).Append('\n');
+        oSb.Append("OriginY: ").Append(nYOrigin.ToString(CultureInfo.InvariantCulture)).Append('\n');
+        oSb.Append("OriginZ: ").Append(nZOrigin.ToString(CultureInfo.InvariantCulture)).Append('\n');
+        oSb.Append("SizeX: ").Append(nXSize.ToString(CultureInfo.InvariantCulture)).Append('\n');
+        oSb.Append("SizeY: ").Append(nYSize.ToString(CultureInfo.InvariantCulture)).Append('\n');
+        oSb.Append("SizeZ: ").Append(nZSize.ToString(CultureInfo.InvariantCulture)).Append('\n');
 
-        byte[] anUtf8 = Encoding.UTF8.GetBytes(str.ToString());
+        byte[] anUtf8 = Encoding.UTF8.GetBytes(oSb.ToString());
         using Stream oStream = oEntry.Open();
         oStream.Write(anUtf8);
     }

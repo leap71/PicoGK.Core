@@ -7,7 +7,7 @@ namespace PicoGK;
 
 internal static class PicovoxArchive
 {
-    static readonly DateTimeOffset s_oCanonicalTimestamp =
+    static readonly DateTimeOffset c_oCanonicalTimestamp =
         new(1980, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
     internal static void Write(Voxels vox, Stream oOutput)
@@ -107,7 +107,7 @@ internal static class PicovoxArchive
     static ZipArchiveEntry oCreateStoredEntry(ZipArchive oArchive, string strName)
     {
         ZipArchiveEntry oEntry = oArchive.CreateEntry(strName, CompressionLevel.NoCompression);
-        oEntry.LastWriteTime = s_oCanonicalTimestamp;
+        oEntry.LastWriteTime = c_oCanonicalTimestamp;
         oEntry.ExternalAttributes = 0;
         return oEntry;
     }
